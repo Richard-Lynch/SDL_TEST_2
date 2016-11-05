@@ -22,13 +22,14 @@ class GameSystem{
     public:
     //The window we'll be rendering to
     SDL_Window* gWindow = NULL;
-    
     //The surface contained by the window
     SDL_Surface* gScreenSurface = NULL;
-    //The Splash image
-    SDL_Surface* gSplash;
+    //The window renderer
+    SDL_Renderer* gRenderer = NULL;
     //Current displayed image
     SDL_Surface* gCurrentSurface = NULL;
+    //Current displayed texture
+    SDL_Texture* gTexture = NULL;
     //The images that correspond to a keypress, array of images
     SDL_Surface* gKeyPressSurfaces[ KEY_PRESS_SURFACE_TOTAL ];
     //the strings that find the images, array of strings
@@ -51,6 +52,8 @@ class GameSystem{
     //Loads media
     bool loadMedia();
     SDL_Surface* loadSurface(std::string path);
+    //Loads individual image as texture
+    SDL_Texture* loadTexture( std::string path );
 
     //Frees media and shuts down SDL
     void close();

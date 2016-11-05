@@ -59,6 +59,18 @@ int main(int argc, const char * argv[]) {
                         game.gCurrentSurface = game.gKeyPressSurfaces[ KEY_PRESS_SURFACE_STRETCH ];
                         break;
                         
+                    case SDLK_KP_A:
+                    {
+                        //Clear screen
+                        SDL_RenderClear( game.gRenderer );
+                        
+                        //Render texture to screen
+                        SDL_RenderCopy( game.gRenderer, game.gTexture, NULL, NULL );
+                        
+                        //Update screen
+                        SDL_RenderPresent( game.gRenderer );
+                    }
+                        
                     default:
                         game.gCurrentSurface = game.gKeyPressSurfaces[ KEY_PRESS_SURFACE_DEFAULT ];
                         break;
