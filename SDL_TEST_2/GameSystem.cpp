@@ -13,44 +13,15 @@ bool GameSystem::loadMedia()
     //Loading success flag
     bool success = true;
     
-    //Load default surface
-    gKeyPressSurfaces[ KEY_PRESS_SURFACE_DEFAULT ] = loadSurface( gKeyPressStrings[ 0 ] );
-    if( gKeyPressSurfaces[ KEY_PRESS_SURFACE_DEFAULT ] == NULL )
+    for(int i = 0; i<KEY_PRESS_SURFACE_TOTAL; i++)
     {
-        printf( "Failed to load default image!\n" );
-        success = false;
-    }
-    
-    //Load up surface
-    gKeyPressSurfaces[ KEY_PRESS_SURFACE_UP ] = loadSurface( gKeyPressStrings[ 1 ] );
-    if( gKeyPressSurfaces[ KEY_PRESS_SURFACE_UP ] == NULL )
-    {
-        printf( "Failed to load up image!\n" );
-        success = false;
-    }
-    
-    //Load down surface
-    gKeyPressSurfaces[ KEY_PRESS_SURFACE_DOWN ] = loadSurface( gKeyPressStrings[ 2 ] );
-    if( gKeyPressSurfaces[ KEY_PRESS_SURFACE_DOWN ] == NULL )
-    {
-        printf( "Failed to load down image!\n" );
-        success = false;
-    }
-    
-    //Load left surface
-    gKeyPressSurfaces[ KEY_PRESS_SURFACE_LEFT ] = loadSurface( gKeyPressStrings[ 3 ] );
-    if( gKeyPressSurfaces[ KEY_PRESS_SURFACE_LEFT ] == NULL )
-    {
-        printf( "Failed to load left image!\n" );
-        success = false;
-    }
-    
-    //Load right surface
-    gKeyPressSurfaces[ KEY_PRESS_SURFACE_RIGHT ] = loadSurface( gKeyPressStrings[ 4 ] );
-    if( gKeyPressSurfaces[ KEY_PRESS_SURFACE_RIGHT ] == NULL )
-    {
-        printf( "Failed to load right image!\n" );
-        success = false;
+        //Load default surface
+        gKeyPressSurfaces[ i ] = loadSurface( gKeyPressStrings[ i ] );
+        if( gKeyPressSurfaces[ KEY_PRESS_SURFACE_DEFAULT ] == NULL )
+        {
+            printf( "Failed to load %d image!\n", i );
+            success = false;
+        }
     }
     
     //Set default current surface
@@ -70,8 +41,20 @@ SDL_Surface* GameSystem::loadSurface( std::string path )
     {
         printf( "Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
     }
+    else
+    {
+        //Convert surface to screen format
+        optimizedSurface = SDL_ConvertSurface( loadedSurface, gScreenSurface->format, NULL );
+        if( optimizedSurface == NULL )
+        {
+            printf( "Unable to optimize image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+        }
+        
+        //Get rid of old loaded surface
+        SDL_FreeSurface( loadedSurface );
+    }
     
-    return loadedSurface;
+    return optimizedSurface;
 }
 
 bool GameSystem::init(){
@@ -80,6 +63,7 @@ bool GameSystem::init(){
     gKeyPressStrings[ 2 ] = "04_key_presses/down.bmp";
     gKeyPressStrings[ 3 ] = "04_key_presses/left.bmp";
     gKeyPressStrings[ 4 ] = "04_key_presses/right.bmp";
+    gKeyPressStrings[ 5 ] = "05_optimized_surface_loading_and_soft_stretching/stretch.bmp";
     
     
     //Initialize SDL

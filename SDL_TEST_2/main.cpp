@@ -54,14 +54,25 @@ int main(int argc, const char * argv[]) {
                         game.gCurrentSurface = game.gKeyPressSurfaces[ KEY_PRESS_SURFACE_RIGHT ];
                         break;
                         
+                    case SDLK_SPACE:
+                        game.gCurrentSurface = game.gKeyPressSurfaces[ KEY_PRESS_SURFACE_STRETCH ];
+                        break;
+                        
                     default:
                         game.gCurrentSurface = game.gKeyPressSurfaces[ KEY_PRESS_SURFACE_DEFAULT ];
                         break;
                 }
             }
         }
+        //Apply the image stretched
+        SDL_Rect stretchRect;
+        stretchRect.x = 0;
+        stretchRect.y = 0;
+        stretchRect.w = game.SCREEN_WIDTH;
+        stretchRect.h = game.SCREEN_HEIGHT;
+        
         //Apply the image
-        SDL_BlitSurface( game.gCurrentSurface, NULL, game.gScreenSurface, NULL );
+        SDL_BlitScaled( game.gCurrentSurface, NULL, game.gScreenSurface, &stretchRect );
         
         //Update the surface
         SDL_UpdateWindowSurface( game.gWindow );
