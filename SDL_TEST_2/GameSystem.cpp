@@ -63,7 +63,7 @@ bool GameSystem::init(){
     gKeyPressStrings[ 2 ] = "04_key_presses/down.bmp";
     gKeyPressStrings[ 3 ] = "04_key_presses/left.bmp";
     gKeyPressStrings[ 4 ] = "04_key_presses/right.bmp";
-    gKeyPressStrings[ 5 ] = "05_optimized_surface_loading_and_soft_stretching/stretch.bmp";
+    gKeyPressStrings[ 5 ] = "05_optimized_surface_loading_and_soft_stretching/stretch.bmp";    
     
     
     //Initialize SDL
@@ -81,7 +81,18 @@ bool GameSystem::init(){
         }
         else
         {
-            gScreenSurface = SDL_GetWindowSurface(gWindow);
+            //Initialize PNG loading
+            int imgFlags = IMG_INIT_PNG;
+            if( !( IMG_Init( imgFlags ) & imgFlags ) )
+            {
+                printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+                initialised = false;
+            }
+            else
+            {
+                //Get window surface
+                gScreenSurface = SDL_GetWindowSurface(gWindow);
+            }
             initialised = true;
             loadMedia();
             
