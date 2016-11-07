@@ -18,6 +18,7 @@ int main(int argc, const char * argv[]) {
     game.init();
     //Main loop flag
     bool quit = false;
+    int dot = 0;
     
     //Event handler
     SDL_Event e;
@@ -44,24 +45,24 @@ int main(int argc, const char * argv[]) {
                 {
                         
                     case SDLK_UP:
-                        game.foo_y -= 10;
+                        game.ypos[dot] -= 10;
                         break;
                         
                     case SDLK_DOWN:
-                        game.foo_y += 10;
+                        game.ypos[dot] += 10;
                         break;
                         
                     case SDLK_LEFT:
-                        game.foo_x -= 10;
+                        game.xpos[dot] -= 10;
                         break;
                         
                     case SDLK_RIGHT:
-                        game.foo_x += 10;
+                        game.xpos[dot]  += 10;
                         break;
                         
                     case SDLK_SPACE:
-                        game.foo_x = 240;
-                        game.foo_y = 190;
+                        dot++;
+                        dot = dot%4;
                         break;
                         
                     default:
@@ -77,8 +78,17 @@ int main(int argc, const char * argv[]) {
         //Render background texture to screen
         game.gBackgroundTexture.render( 0, 0 , game.gRenderer);
         
-        //Render Foo' to the screen
-        game.gFooTexture.render( game.foo_x, game.foo_y , game.gRenderer);
+        //Render top left sprite
+        game.gSpriteSheetTexture.render( game.xpos[0], game.ypos[0], game.gRenderer, &(game.gSpriteClips[ 0 ]) );
+        
+        //Render top right sprite
+        game.gSpriteSheetTexture.render( game.xpos[1], game.ypos[1], game.gRenderer, &(game.gSpriteClips[ 1 ]) );
+        
+        //Render bottom left sprite
+        game.gSpriteSheetTexture.render( game.xpos[2], game.ypos[2], game.gRenderer, &(game.gSpriteClips[ 2 ]) );
+        
+        //Render bottom right sprite
+        game.gSpriteSheetTexture.render( game.xpos[3], game.ypos[3], game.gRenderer, &(game.gSpriteClips[ 3 ]) );
         
         //Update screen
         SDL_RenderPresent( game.gRenderer );

@@ -36,10 +36,14 @@ class GameSystem{
     std::string gKeyPressStrings[ KEY_PRESS_SURFACE_TOTAL ];
     
     //Scene textures
-    LTexture gFooTexture;
     LTexture gBackgroundTexture;
+    //Scene sprites
+    SDL_Rect gSpriteClips[ 4 ];
+    LTexture gSpriteSheetTexture;
     //scene locations
     int foo_x, foo_y;
+    int xpos[4];
+    int ypos[4];
 
     //Screen dimension constants
     const int SCREEN_WIDTH = 640;

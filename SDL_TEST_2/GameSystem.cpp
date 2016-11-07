@@ -24,20 +24,53 @@ bool GameSystem::loadMedia()
         }
         
         //Load Foo' texture
-        if( !gFooTexture.loadFromFile( "10_color_keying/foo.png" , gRenderer) )
+        if( !gBackgroundTexture.loadFromFile( "10_color_keying/background.png" , gRenderer) )
         {
             printf( "Failed to load Foo' texture image!\n" );
             success = false;
         }
         
-        //Load background texture
-        if( !gBackgroundTexture.loadFromFile( "10_color_keying/background.png" , gRenderer) )
+        //Load sprite sheet texture
+        if( !gSpriteSheetTexture.loadFromFile( "11_clip_rendering_and_sprite_sheets/dots.png", gRenderer ) )
         {
-            printf( "Failed to load background texture image!\n" );
+            printf( "Failed to load sprite sheet texture!\n" );
             success = false;
         }
+        else
+        {
+            //Set top left sprite
+            gSpriteClips[ 0 ].x =   0;
+            gSpriteClips[ 0 ].y =   0;
+            gSpriteClips[ 0 ].w = 100;
+            gSpriteClips[ 0 ].h = 100;
+            xpos[0] = 0;
+            ypos[0] = 0;
+            
+            //Set top right sprite
+            gSpriteClips[ 1 ].x = 100;
+            gSpriteClips[ 1 ].y =   0;
+            gSpriteClips[ 1 ].w = 100;
+            gSpriteClips[ 1 ].h = 100;
+            xpos[1] = SCREEN_WIDTH - gSpriteClips[ 1 ].w;
+            ypos[1] = 0;
+            
+            //Set bottom left sprite
+            gSpriteClips[ 2 ].x =   0;
+            gSpriteClips[ 2 ].y = 100;
+            gSpriteClips[ 2 ].w = 100;
+            gSpriteClips[ 2 ].h = 100;
+            xpos[2] = 0;
+            ypos[2] = SCREEN_HEIGHT - gSpriteClips[ 2 ].h;
+            
+            //Set bottom right sprite
+            gSpriteClips[ 3 ].x = 100;
+            gSpriteClips[ 3 ].y = 100;
+            gSpriteClips[ 3 ].w = 100;
+            gSpriteClips[ 3 ].h = 100;
+            xpos[3] = SCREEN_WIDTH - gSpriteClips[ 3 ].w;
+            ypos[3] = SCREEN_HEIGHT - gSpriteClips[ 3 ].h;
+        }
     }
-
     
     //Set default current surface
     gCurrentSurface = gKeyPressSurfaces[ KEY_PRESS_SURFACE_DEFAULT ];
