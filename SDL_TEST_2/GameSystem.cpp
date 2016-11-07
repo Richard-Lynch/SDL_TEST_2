@@ -15,20 +15,27 @@ bool GameSystem::loadMedia()
     
     for(int i = 0; i<KEY_PRESS_SURFACE_TOTAL; i++)
     {
-        //Load default surface
-        gKeyPressSurfaces[ i ] = loadSurface( gKeyPressStrings[ i ] );
-        if( gKeyPressSurfaces[ KEY_PRESS_SURFACE_DEFAULT ] == NULL )
+        //Load PNG textures
+        gTexture[ i ] = loadTexture( gKeyPressStrings[ i ] );
+        if( gTexture[ KEY_PRESS_SURFACE_DEFAULT ] == NULL )
         {
-            printf( "Failed to load %d image!\n", i );
+            printf( "Failed to load %d texture image!\n", i );
             success = false;
         }
-    }
-    //Load PNG texture
-    gTexture = loadTexture( "07_texture_loading_and_rendering/texture.png" );
-    if( gTexture == NULL )
-    {
-        printf( "Failed to load texture image!\n" );
-        success = false;
+        
+        //Load Foo' texture
+        if( !gFooTexture.loadFromFile( "10_color_keying/foo.png" , gRenderer) )
+        {
+            printf( "Failed to load Foo' texture image!\n" );
+            success = false;
+        }
+        
+        //Load background texture
+        if( !gBackgroundTexture.loadFromFile( "10_color_keying/background.png" , gRenderer) )
+        {
+            printf( "Failed to load background texture image!\n" );
+            success = false;
+        }
     }
 
     
@@ -92,14 +99,54 @@ SDL_Texture* GameSystem::loadTexture( std::string path )
     return newTexture;
 }
 
-bool GameSystem::init(){
-    gKeyPressStrings[ 0 ] = "04_key_presses/press.bmp";
-    gKeyPressStrings[ 1 ] = "04_key_presses/up.bmp";
-    gKeyPressStrings[ 2 ] = "04_key_presses/down.bmp";
-    gKeyPressStrings[ 3 ] = "04_key_presses/left.bmp";
-    gKeyPressStrings[ 4 ] = "04_key_presses/right.bmp";
-    gKeyPressStrings[ 5 ] = "05_optimized_surface_loading_and_soft_stretching/stretch.bmp";    
+bool GameSystem::useViewports(){
+    bool success = true;
     
+    //left
+    topLeftViewport.x = 0;
+    topLeftViewport.y = 0;
+    topLeftViewport.w = SCREEN_WIDTH / 2;
+    topLeftViewport.h = SCREEN_HEIGHT / 2;
+    SDL_RenderSetViewport( gRenderer, &topLeftViewport );
+    
+    //Render texture to screen
+    SDL_RenderCopy( gRenderer, gTexture[KEY_PRESS_VIEWPORT_TEXTURE], NULL, NULL );
+    
+    //right
+    topRightViewport.x = SCREEN_WIDTH / 2;
+    topRightViewport.y = 0;
+    topRightViewport.w = SCREEN_WIDTH / 2;
+    topRightViewport.h = SCREEN_HEIGHT / 2;
+    SDL_RenderSetViewport( gRenderer, &topRightViewport );
+    
+    //Render texture to screen
+    SDL_RenderCopy( gRenderer, gTexture[KEY_PRESS_VIEWPORT_TEXTURE], NULL, NULL );
+    
+    //bottom
+    bottomViewport.x = 0;
+    bottomViewport.y = SCREEN_HEIGHT / 2;
+    bottomViewport.w = SCREEN_WIDTH;
+    bottomViewport.h = SCREEN_HEIGHT / 2;
+    SDL_RenderSetViewport( gRenderer, &bottomViewport );
+    
+    //Render texture to screen
+    SDL_RenderCopy( gRenderer, gTexture[KEY_PRESS_VIEWPORT_TEXTURE], NULL, NULL );
+    
+    return success;
+}
+
+bool GameSystem::init(){
+    gKeyPressStrings[ 0 ] = "04_key_presses/press.png";
+    gKeyPressStrings[ 1 ] = "04_key_presses/up.png";
+    gKeyPressStrings[ 2 ] = "04_key_presses/down.png";
+    gKeyPressStrings[ 3 ] = "04_key_presses/left.png";
+    gKeyPressStrings[ 4 ] = "04_key_presses/right.png";
+    gKeyPressStrings[ 5 ] = "05_optimized_surface_loading_and_soft_stretching/stretch.png";
+    gKeyPressStrings[ 6 ] = "07_texture_loading_and_rendering/texture.png";
+    gKeyPressStrings[ 7 ] = "09_the_viewport/viewport.png";
+    
+    foo_x = 240;
+    foo_y = 190;
     
     //Initialize SDL
     if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
@@ -158,9 +205,9 @@ bool GameSystem::init(){
 
 void GameSystem::close()
 {
+    for(int i = 0; i < KEY_PRESS_SURFACE_TOTAL; i++)
     //Free loaded image
-    SDL_DestroyTexture( gTexture );
-    gTexture = NULL;
+    SDL_DestroyTexture( gTexture[i] );
     
     //Deallocate surfaces
     for( int i = 0; i < KEY_PRESS_SURFACE_TOTAL; ++i )

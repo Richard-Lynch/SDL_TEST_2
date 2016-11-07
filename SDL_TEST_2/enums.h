@@ -10,7 +10,7 @@
 #define enums_h
 
 //Key press surfaces constants
-enum KeyPressSurfaces
+enum KeyPressTextures
 {
     KEY_PRESS_SURFACE_DEFAULT,
     KEY_PRESS_SURFACE_UP,
@@ -18,6 +18,8 @@ enum KeyPressSurfaces
     KEY_PRESS_SURFACE_LEFT,
     KEY_PRESS_SURFACE_RIGHT,
     KEY_PRESS_SURFACE_STRETCH,
+    KEY_PRESS_TEXTURE_RENDER,
+    KEY_PRESS_VIEWPORT_TEXTURE,
     KEY_PRESS_SURFACE_TOTAL
 };
 

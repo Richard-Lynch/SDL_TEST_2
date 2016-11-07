@@ -22,6 +22,11 @@ int main(int argc, const char * argv[]) {
     //Event handler
     SDL_Event e;
     
+    //Clear screen
+    SDL_SetRenderDrawColor( game.gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+    SDL_RenderClear( game.gRenderer );
+    
+    
     //While application is running
     while( !quit )
     {
@@ -33,63 +38,52 @@ int main(int argc, const char * argv[]) {
             {
                 quit = true;
             }
-            //User presses a key
-            else if( e.type == SDL_KEYDOWN )
-            {
+            else if( e.type == SDL_KEYDOWN ){
                 //Select surfaces based on key press
                 switch( e.key.keysym.sym )
                 {
+                        
                     case SDLK_UP:
-                        game.gCurrentSurface = game.gKeyPressSurfaces[ KEY_PRESS_SURFACE_UP ];
+                        game.foo_y -= 10;
                         break;
                         
                     case SDLK_DOWN:
-                        game.gCurrentSurface = game.gKeyPressSurfaces[ KEY_PRESS_SURFACE_DOWN ];
+                        game.foo_y += 10;
                         break;
                         
                     case SDLK_LEFT:
-                        game.gCurrentSurface = game.gKeyPressSurfaces[ KEY_PRESS_SURFACE_LEFT ];
+                        game.foo_x -= 10;
                         break;
                         
                     case SDLK_RIGHT:
-                        game.gCurrentSurface = game.gKeyPressSurfaces[ KEY_PRESS_SURFACE_RIGHT ];
+                        game.foo_x += 10;
                         break;
                         
                     case SDLK_SPACE:
-                        game.gCurrentSurface = game.gKeyPressSurfaces[ KEY_PRESS_SURFACE_STRETCH ];
+                        game.foo_x = 240;
+                        game.foo_y = 190;
                         break;
-                        
-                    case SDLK_KP_A:
-                    {
-                        //Clear screen
-                        SDL_RenderClear( game.gRenderer );
-                        
-                        //Render texture to screen
-                        SDL_RenderCopy( game.gRenderer, game.gTexture, NULL, NULL );
-                        
-                        //Update screen
-                        SDL_RenderPresent( game.gRenderer );
-                    }
                         
                     default:
-                        game.gCurrentSurface = game.gKeyPressSurfaces[ KEY_PRESS_SURFACE_DEFAULT ];
                         break;
                 }
+
             }
         }
-        //Apply the image stretched
-        SDL_Rect stretchRect;
-        stretchRect.x = 0;
-        stretchRect.y = 0;
-        stretchRect.w = game.SCREEN_WIDTH;
-        stretchRect.h = game.SCREEN_HEIGHT;
+        //Clear screen
+        SDL_SetRenderDrawColor( game.gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+        SDL_RenderClear( game.gRenderer );
         
-        //Apply the image
-        SDL_BlitScaled( game.gCurrentSurface, NULL, game.gScreenSurface, &stretchRect );
+        //Render background texture to screen
+        game.gBackgroundTexture.render( 0, 0 , game.gRenderer);
         
-        //Update the surface
-        SDL_UpdateWindowSurface( game.gWindow );
+        //Render Foo' to the screen
+        game.gFooTexture.render( game.foo_x, game.foo_y , game.gRenderer);
+        
+        //Update screen
+        SDL_RenderPresent( game.gRenderer );
     }
+    game.close();
     return 0;
 }
 
