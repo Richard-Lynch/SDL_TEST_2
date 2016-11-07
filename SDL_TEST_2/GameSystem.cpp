@@ -12,97 +12,32 @@ bool GameSystem::loadMedia()
 {
     //Loading success flag
     bool success = true;
-    
-    for(int i = 0; i<KEY_PRESS_SURFACE_TOTAL; i++)
-    {
-        //Load PNG textures
-        gTexture[ i ] = loadTexture( gKeyPressStrings[ i ] );
-        if( gTexture[ KEY_PRESS_SURFACE_DEFAULT ] == NULL )
-        {
-            printf( "Failed to load %d texture image!\n", i );
-            success = false;
-        }
-        
-        //Load Foo' texture
-        if( !gBackgroundTexture.loadFromFile( "10_color_keying/background.png" , gRenderer) )
-        {
-            printf( "Failed to load Foo' texture image!\n" );
-            success = false;
-        }
-        
-        //Load sprite sheet texture
-        if( !gSpriteSheetTexture.loadFromFile( "11_clip_rendering_and_sprite_sheets/dots.png", gRenderer ) )
-        {
-            printf( "Failed to load sprite sheet texture!\n" );
-            success = false;
-        }
-        else
-        {
-            //Set top left sprite
-            gSpriteClips[ 0 ].x =   0;
-            gSpriteClips[ 0 ].y =   0;
-            gSpriteClips[ 0 ].w = 100;
-            gSpriteClips[ 0 ].h = 100;
-            xpos[0] = 0;
-            ypos[0] = 0;
-            
-            //Set top right sprite
-            gSpriteClips[ 1 ].x = 100;
-            gSpriteClips[ 1 ].y =   0;
-            gSpriteClips[ 1 ].w = 100;
-            gSpriteClips[ 1 ].h = 100;
-            xpos[1] = SCREEN_WIDTH - gSpriteClips[ 1 ].w;
-            ypos[1] = 0;
-            
-            //Set bottom left sprite
-            gSpriteClips[ 2 ].x =   0;
-            gSpriteClips[ 2 ].y = 100;
-            gSpriteClips[ 2 ].w = 100;
-            gSpriteClips[ 2 ].h = 100;
-            xpos[2] = 0;
-            ypos[2] = SCREEN_HEIGHT - gSpriteClips[ 2 ].h;
-            
-            //Set bottom right sprite
-            gSpriteClips[ 3 ].x = 100;
-            gSpriteClips[ 3 ].y = 100;
-            gSpriteClips[ 3 ].w = 100;
-            gSpriteClips[ 3 ].h = 100;
-            xpos[3] = SCREEN_WIDTH - gSpriteClips[ 3 ].w;
-            ypos[3] = SCREEN_HEIGHT - gSpriteClips[ 3 ].h;
-        }
-    }
-    
-    //Set default current surface
-    gCurrentSurface = gKeyPressSurfaces[ KEY_PRESS_SURFACE_DEFAULT ];
-    
-    return success;
-}
 
-SDL_Surface* GameSystem::loadSurface( std::string path )
-{
-    //The final optimized image
-    SDL_Surface* optimizedSurface = NULL;
-    
-    //Load image at specified path
-    SDL_Surface* loadedSurface = SDL_LoadBMP( path.c_str() );
-    if( loadedSurface == NULL )
+    //Load sprites
+    if( !gButtonSpriteSheetTexture.loadFromFile( "17_mouse_events/button.png" , gRenderer) )
     {
-        printf( "Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+        printf( "Failed to load button sprite texture!\n" );
+        success = false;
     }
     else
     {
-        //Convert surface to screen format
-        optimizedSurface = SDL_ConvertSurface( loadedSurface, gScreenSurface->format, NULL );
-        if( optimizedSurface == NULL )
+        //Set sprites
+        for( int i = 0; i < BUTTON_SPRITE_TOTAL; ++i )
         {
-            printf( "Unable to optimize image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+            gSpriteClips[ i ].x = 0;
+            gSpriteClips[ i ].y = i * 200;
+            gSpriteClips[ i ].w = BUTTON_WIDTH;
+            gSpriteClips[ i ].h = BUTTON_HEIGHT;
         }
         
-        //Get rid of old loaded surface
-        SDL_FreeSurface( loadedSurface );
+        //Set buttons in corners
+        gButtons[ 0 ].setPosition( 0, 0 );
+        gButtons[ 1 ].setPosition( SCREEN_WIDTH - BUTTON_WIDTH, 0 );
+        gButtons[ 2 ].setPosition( 0, SCREEN_HEIGHT - BUTTON_HEIGHT );
+        gButtons[ 3 ].setPosition( SCREEN_WIDTH - BUTTON_WIDTH, SCREEN_HEIGHT - BUTTON_HEIGHT );
     }
     
-    return optimizedSurface;
+    return success;
 }
 
 SDL_Texture* GameSystem::loadTexture( std::string path )
@@ -204,9 +139,8 @@ bool GameSystem::init(){
         }
         else
         {
-            //Create renderer for window
-            gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED );
-
+            //Create vsynced renderer for window
+            gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
             if( gRenderer == NULL )
             {
                 printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -222,6 +156,13 @@ bool GameSystem::init(){
                 if( !( IMG_Init( imgFlags ) & imgFlags ) )
                 {
                     printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+                    initialised = false;
+                }
+                
+                //Initialize SDL_ttf
+                if( TTF_Init() == -1 )
+                {
+                    printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
                     initialised = false;
                 }
             }
@@ -256,6 +197,7 @@ void GameSystem::close()
     gRenderer = NULL;
     
     //Quit SDL subsystems
+    TTF_Quit();
     IMG_Quit();
     SDL_Quit();
 }

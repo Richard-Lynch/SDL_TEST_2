@@ -14,7 +14,9 @@
 #include <string>
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
+#include <SDL2_ttf/SDL_ttf.h>
 
+#include "LButton.hpp"
 #include "LTexture.hpp"
 #include "enums.h"
 
@@ -35,15 +37,23 @@ class GameSystem{
     //the strings that find the images, array of strings
     std::string gKeyPressStrings[ KEY_PRESS_SURFACE_TOTAL ];
     
+    //Buttons objects
+    LButton gButtons[ TOTAL_BUTTONS ];
+    LTexture gButtonSpriteSheetTexture;
+    
     //Scene textures
     LTexture gBackgroundTexture;
     //Scene sprites
-    SDL_Rect gSpriteClips[ 4 ];
+    SDL_Rect gSpriteClips[ BUTTON_SPRITE_TOTAL ];
     LTexture gSpriteSheetTexture;
     //scene locations
     int foo_x, foo_y;
     int xpos[4];
     int ypos[4];
+    
+    LTexture gFadeIn;
+    LTexture gFadeOut;
+    
 
     //Screen dimension constants
     const int SCREEN_WIDTH = 640;
