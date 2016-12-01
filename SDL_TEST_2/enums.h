@@ -9,17 +9,39 @@
 #ifndef enums_h
 #define enums_h
 
-//Key press surfaces constants
-enum KeyPressSurfaces
+//Texture Constants
+enum Textures
 {
-    KEY_PRESS_SURFACE_DEFAULT,
-    KEY_PRESS_SURFACE_UP,
-    KEY_PRESS_SURFACE_DOWN,
-    KEY_PRESS_SURFACE_LEFT,
-    KEY_PRESS_SURFACE_RIGHT,
-    KEY_PRESS_SURFACE_STRETCH,
-    KEY_PRESS_SURFACE_TOTAL
+    PRESS_TEXTURE,
+    UP_TEXTURE,
+    DOWN_TEXTURE,
+    LEFT_TEXTURE,
+    RIGHT_TEXTURE,
+    DOT_TEXTURE,
+    BACKGROUND_TEXTURE,
+    TOTAL_TEXTURES
 };
 
+enum Sprites
+{
+    DEFUALT_SPRITE,
+    FOO_SPRITE,
+    TOTAL_SPRITES
+};
+
+
+enum Button_constants{
+    BUTTON_WIDTH = 300,
+    BUTTON_HEIGHT = 200,
+    TOTAL_BUTTONS = 4
+};
+
+
+enum Location
+{
+    X_POS,
+    Y_POS,
+    TOTAL_POS
+    };
 
 #endif /* enums_h */

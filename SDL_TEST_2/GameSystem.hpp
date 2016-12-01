@@ -14,43 +14,48 @@
 #include <string>
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
+#include <SDL2_ttf/SDL_ttf.h>
+#include <sstream>
 
-
+#include "LTexture.hpp"
 #include "enums.h"
 
 class GameSystem{
     public:
     //The window we'll be rendering to
     SDL_Window* gWindow = NULL;
-    
     //The surface contained by the window
     SDL_Surface* gScreenSurface = NULL;
-    //The Splash image
-    SDL_Surface* gSplash;
+    //The window renderer
+    SDL_Renderer* gRenderer = NULL;
     //Current displayed image
-    SDL_Surface* gCurrentSurface = NULL;
-    //The images that correspond to a keypress, array of images
-    SDL_Surface* gKeyPressSurfaces[ KEY_PRESS_SURFACE_TOTAL ];
-    //the strings that find the images, array of strings
-    std::string gKeyPressStrings[ KEY_PRESS_SURFACE_TOTAL ];
-
+    LTexture* gCurrentTexture = NULL;
+    
+    //Title of window
+    const std::string title = "SDL Tutorials";
+    //The dimensions of the level
+    const int LEVEL_WIDTH = 1280;
+    const int LEVEL_HEIGHT = 960;
     //Screen dimension constants
     const int SCREEN_WIDTH = 640;
     const int SCREEN_HEIGHT = 480;
     
-    //text
-    const std::string splash = "x.bmp";
-    const std::string title = "SDL Tutorials";
+    //Current displayed texture
+    LTexture* gTexture[ TOTAL_TEXTURES ];
+    //the strings that find the images, array of strings
+    std::string gImage_Strings[ TOTAL_TEXTURES ];
+    SDL_Rect gClips[TOTAL_SPRITES];
+    int gSpriteLoc[TOTAL_SPRITES][TOTAL_POS];
     
     //flags
     bool initialised = false;
 
     //Starts up SDL and creates window
     bool init();
-
     //Loads media
     bool loadMedia();
-    SDL_Surface* loadSurface(std::string path);
+    //Loads individual image as texture
+    SDL_Texture* loadTexture( std::string path );
 
     //Frees media and shuts down SDL
     void close();

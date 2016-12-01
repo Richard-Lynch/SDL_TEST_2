@@ -1,0 +1,157 @@
+
+
+//Select surfaces based on key press
+switch( e.key.keysym.sym )
+{
+
+case SDLK_UP:
+game.gCurrentSurface = game.gKeyPressSurfaces[ KEY_PRESS_SURFACE_UP ];
+SDL_RenderCopy( game.gRenderer, game.gTexture[KEY_PRESS_SURFACE_UP], NULL, NULL );
+break;
+
+case SDLK_DOWN:
+game.gCurrentSurface = game.gKeyPressSurfaces[ KEY_PRESS_SURFACE_DOWN ];
+SDL_RenderCopy( game.gRenderer, game.gTexture[KEY_PRESS_SURFACE_DOWN], NULL, NULL );
+break;
+
+case SDLK_LEFT:
+game.gCurrentSurface = game.gKeyPressSurfaces[ KEY_PRESS_SURFACE_LEFT ];
+SDL_RenderCopy( game.gRenderer, game.gTexture[KEY_PRESS_SURFACE_LEFT], NULL, NULL );
+break;
+
+case SDLK_RIGHT:
+game.gCurrentSurface = game.gKeyPressSurfaces[ KEY_PRESS_SURFACE_RIGHT ];
+SDL_RenderCopy( game.gRenderer, game.gTexture[KEY_PRESS_SURFACE_RIGHT], NULL, NULL );
+break;
+
+case SDLK_SPACE:
+game.gCurrentSurface = game.gKeyPressSurfaces[ KEY_PRESS_SURFACE_STRETCH ];
+SDL_RenderCopy( game.gRenderer, game.gTexture[KEY_PRESS_SURFACE_STRETCH], NULL, NULL );
+break;
+
+case SDLK_a:
+SDL_RenderCopy( game.gRenderer, game.gTexture[KEY_PRESS_TEXTURE_RENDER], NULL, NULL );
+break;
+
+default:
+SDL_RenderCopy( game.gRenderer, game.gTexture[KEY_PRESS_SURFACE_DEFAULT], NULL, NULL );
+break;
+}
+
+//Render red filled quad
+SDL_Rect fillRect = { game.SCREEN_WIDTH / 4, game.SCREEN_HEIGHT / 4, game.SCREEN_WIDTH / 2, game.SCREEN_HEIGHT / 2 };
+SDL_SetRenderDrawColor( game.gRenderer, 0xFF, 0x00, 0x00, 0xFF );
+SDL_RenderFillRect( game.gRenderer, &fillRect );
+
+//Render green outlined quad
+SDL_Rect outlineRect = { game.SCREEN_WIDTH / 6, game.SCREEN_HEIGHT / 6, game.SCREEN_WIDTH * 2 / 3, game.SCREEN_HEIGHT * 2 / 3 };
+SDL_SetRenderDrawColor( game.gRenderer, 0x00, 0xFF, 0x00, 0xFF );
+SDL_RenderDrawRect( game.gRenderer, &outlineRect );
+
+//Draw blue horizontal line
+SDL_SetRenderDrawColor( game.gRenderer, 0x00, 0x00, 0xFF, 0xFF );
+SDL_RenderDrawLine( game.gRenderer, 0, game.SCREEN_HEIGHT / 2, game.SCREEN_WIDTH, game.SCREEN_HEIGHT / 2 );
+
+//Draw vertical line of yellow dots
+SDL_SetRenderDrawColor( game.gRenderer, 0xFF, 0xFF, 0x00, 0xFF );
+for( int i = 0; i < game.SCREEN_HEIGHT; i += 4 )
+{
+SDL_RenderDrawPoint( game.gRenderer, game.SCREEN_WIDTH / 2, i );
+}
+
+
+//Load sprite sheet texture
+if( !gSpriteSheetTexture.loadFromFile( "11_clip_rendering_and_sprite_sheets/dots.png", gRenderer ) )
+{
+printf( "Failed to load sprite sheet texture!\n" );
+success = false;
+}
+else
+{
+//Set top left sprite
+gSpriteClips[ 0 ].x =   0;
+gSpriteClips[ 0 ].y =   0;
+gSpriteClips[ 0 ].w = 100;
+gSpriteClips[ 0 ].h = 100;
+xpos[0] = 0;
+ypos[0] = 0;
+
+//Set top right sprite
+gSpriteClips[ 1 ].x = 100;
+gSpriteClips[ 1 ].y =   0;
+gSpriteClips[ 1 ].w = 100;
+gSpriteClips[ 1 ].h = 100;
+xpos[1] = SCREEN_WIDTH - gSpriteClips[ 1 ].w;
+ypos[1] = 0;
+
+//Set bottom left sprite
+gSpriteClips[ 2 ].x =   0;
+gSpriteClips[ 2 ].y = 100;
+gSpriteClips[ 2 ].w = 100;
+gSpriteClips[ 2 ].h = 100;
+xpos[2] = 0;
+ypos[2] = SCREEN_HEIGHT - gSpriteClips[ 2 ].h;
+
+//Set bottom right sprite
+gSpriteClips[ 3 ].x = 100;
+gSpriteClips[ 3 ].y = 100;
+gSpriteClips[ 3 ].w = 100;
+gSpriteClips[ 3 ].h = 100;
+xpos[3] = SCREEN_WIDTH - gSpriteClips[ 3 ].w;
+ypos[3] = SCREEN_HEIGHT - gSpriteClips[ 3 ].h;
+}
+
+
+
+countedFrames++;
+
+//If frame finished early
+int frameTicks = capTimer.getTicks();
+if( frameTicks < TickPerFrame )
+{
+//Wait remaining time
+SDL_Delay( TickPerFrame - frameTicks );
+}
+
+
+//Calculate and correct fps
+if(1000.00 < fpsTimer.getTicks() - lastCheck){
+printf("%d Frames/Sec \n", countedFrames);
+countedFrames = 0;
+lastCheck = fpsTimer.getTicks();
+}
+
+
+//Set texture based on current keystate
+const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
+if( currentKeyStates[ SDL_SCANCODE_UP ] )
+{
+game.gCurrentTexture = (game.gTexture[UP_TEXTURE]);
+}
+else if( currentKeyStates[ SDL_SCANCODE_DOWN ] )
+{
+game.gCurrentTexture = (game.gTexture[DOWN_TEXTURE]);
+}
+else if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
+{
+game.gCurrentTexture = (game.gTexture[LEFT_TEXTURE]);
+}
+else if( currentKeyStates[ SDL_SCANCODE_RIGHT ] )
+{
+game.gCurrentTexture = (game.gTexture[RIGHT_TEXTURE]);
+}
+else
+{
+game.gCurrentTexture = (game.gTexture[PRESS_TEXTURE]);
+}
+
+//The frames per second timer
+LTimer fpsTimer;
+LTimer capTimer;
+//Start counting frames per second
+int countedFrames = 0;
+fpsTimer.start();
+capTimer.start();
+Uint32 lastCheck = fpsTimer.getTicks();
+const int FPS = 60;
+const int TickPerFrame = 1000/FPS;
