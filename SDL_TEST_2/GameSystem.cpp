@@ -13,108 +13,25 @@ bool GameSystem::loadMedia()
     //Loading success flag
     bool success = true;
 
-    //Load sprites
-    if( !gButtonSpriteSheetTexture.loadFromFile( "17_mouse_events/button.png" , gRenderer) )
-    {
-        printf( "Failed to load button sprite texture!\n" );
-        success = false;
-    }
-    else
-    {
-        //Set sprites
-        for( int i = 0; i < BUTTON_SPRITE_TOTAL; ++i )
+    for(int i = 0; i<TOTAL_TEXTURES; i++){
+        //Load sprites
+        if( !gTexture[i]->loadFromFile( gImage_Strings[i]) )
         {
-            gSpriteClips[ i ].x = 0;
-            gSpriteClips[ i ].y = i * 200;
-            gSpriteClips[ i ].w = BUTTON_WIDTH;
-            gSpriteClips[ i ].h = BUTTON_HEIGHT;
+            printf( "Failed to load texture number: %d!\n", i );
+            success = false;
         }
-        
-        //Set buttons in corners
-        gButtons[ 0 ].setPosition( 0, 0 );
-        gButtons[ 1 ].setPosition( SCREEN_WIDTH - BUTTON_WIDTH, 0 );
-        gButtons[ 2 ].setPosition( 0, SCREEN_HEIGHT - BUTTON_HEIGHT );
-        gButtons[ 3 ].setPosition( SCREEN_WIDTH - BUTTON_WIDTH, SCREEN_HEIGHT - BUTTON_HEIGHT );
+        else
+        {
+            //create clips
+            //create sprites
+        }
     }
     
     return success;
 }
 
-SDL_Texture* GameSystem::loadTexture( std::string path )
-{
-    //The final texture
-    SDL_Texture* newTexture = NULL;
-    
-    //Load image at specified path
-    SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
-    if( loadedSurface == NULL )
-    {
-        printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
-    }
-    else
-    {
-        //Create texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
-        if( newTexture == NULL )
-        {
-            printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
-        }
-        
-        //Get rid of old loaded surface
-        SDL_FreeSurface( loadedSurface );
-    }
-    
-    return newTexture;
-}
-
-bool GameSystem::useViewports(){
-    bool success = true;
-    
-    //left
-    topLeftViewport.x = 0;
-    topLeftViewport.y = 0;
-    topLeftViewport.w = SCREEN_WIDTH / 2;
-    topLeftViewport.h = SCREEN_HEIGHT / 2;
-    SDL_RenderSetViewport( gRenderer, &topLeftViewport );
-    
-    //Render texture to screen
-    SDL_RenderCopy( gRenderer, gTexture[KEY_PRESS_VIEWPORT_TEXTURE], NULL, NULL );
-    
-    //right
-    topRightViewport.x = SCREEN_WIDTH / 2;
-    topRightViewport.y = 0;
-    topRightViewport.w = SCREEN_WIDTH / 2;
-    topRightViewport.h = SCREEN_HEIGHT / 2;
-    SDL_RenderSetViewport( gRenderer, &topRightViewport );
-    
-    //Render texture to screen
-    SDL_RenderCopy( gRenderer, gTexture[KEY_PRESS_VIEWPORT_TEXTURE], NULL, NULL );
-    
-    //bottom
-    bottomViewport.x = 0;
-    bottomViewport.y = SCREEN_HEIGHT / 2;
-    bottomViewport.w = SCREEN_WIDTH;
-    bottomViewport.h = SCREEN_HEIGHT / 2;
-    SDL_RenderSetViewport( gRenderer, &bottomViewport );
-    
-    //Render texture to screen
-    SDL_RenderCopy( gRenderer, gTexture[KEY_PRESS_VIEWPORT_TEXTURE], NULL, NULL );
-    
-    return success;
-}
 
 bool GameSystem::init(){
-    gKeyPressStrings[ 0 ] = "04_key_presses/press.png";
-    gKeyPressStrings[ 1 ] = "04_key_presses/up.png";
-    gKeyPressStrings[ 2 ] = "04_key_presses/down.png";
-    gKeyPressStrings[ 3 ] = "04_key_presses/left.png";
-    gKeyPressStrings[ 4 ] = "04_key_presses/right.png";
-    gKeyPressStrings[ 5 ] = "05_optimized_surface_loading_and_soft_stretching/stretch.png";
-    gKeyPressStrings[ 6 ] = "07_texture_loading_and_rendering/texture.png";
-    gKeyPressStrings[ 7 ] = "09_the_viewport/viewport.png";
-    
-    foo_x = 240;
-    foo_y = 190;
     
     //Initialize SDL
     if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
@@ -158,36 +75,37 @@ bool GameSystem::init(){
                     printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
                     initialised = false;
                 }
-                
-                //Initialize SDL_ttf
-                if( TTF_Init() == -1 )
-                {
-                    printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
-                    initialised = false;
-                }
             }
-
-
+            
             //Get window surface
             gScreenSurface = SDL_GetWindowSurface(gWindow);
+            
+            //initlise textures and strings
+            for(int i = 0; i<TOTAL_TEXTURES; i++){
+                //create LTextures
+                gTexture[ i ] = new LTexture(gRenderer);
+            }
+            gImage_Strings[PRESS_TEXTURE] = "18_key_states/press.png";
+            gImage_Strings[UP_TEXTURE] = "18_key_states/up.png";
+            gImage_Strings[DOWN_TEXTURE] = "18_key_states/down.png";
+            gImage_Strings[LEFT_TEXTURE] = "18_key_states/left.png";
+            gImage_Strings[RIGHT_TEXTURE] = "18_key_states/right.png";
+            gImage_Strings[DOT_TEXTURE] = "26_motion/dot.bmp";
+            gImage_Strings[BACKGROUND_TEXTURE] = "30_scrolling/bg.png";
+            
             loadMedia();
             
         }
     }
+    
+    
     return initialised;
 }
 
 void GameSystem::close()
 {
-    for(int i = 0; i < KEY_PRESS_SURFACE_TOTAL; i++)
-    //Free loaded image
-    SDL_DestroyTexture( gTexture[i] );
-    
-    //Deallocate surfaces
-    for( int i = 0; i < KEY_PRESS_SURFACE_TOTAL; ++i )
-    {
-        SDL_FreeSurface( gKeyPressSurfaces[ i ] );
-        gKeyPressSurfaces[ i ] = NULL;
+    for(int i = 0; i < TOTAL_TEXTURES; i++){
+        delete gTexture[i];
     }
     
     //Destroy window

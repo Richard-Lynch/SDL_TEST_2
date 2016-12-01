@@ -12,9 +12,9 @@
 		7927725E1DCD1A9C00600E15 /* GameSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7927725C1DCD1A9C00600E15 /* GameSystem.cpp */; };
 		7964F4411DCE817000E27C9A /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7964F4401DCE817000E27C9A /* SDL2_image.framework */; };
 		7964F4451DD0D5AA00E27C9A /* LTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7964F4431DD0D5AA00E27C9A /* LTexture.cpp */; };
-		7964F4481DD0E5AC00E27C9A /* Character.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7964F4461DD0E5AC00E27C9A /* Character.cpp */; };
 		7964F44A1DD0EF2D00E27C9A /* SDL2_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7964F4491DD0EF2D00E27C9A /* SDL2_ttf.framework */; };
-		7964F44D1DD0F3BC00E27C9A /* LButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7964F44B1DD0F3BC00E27C9A /* LButton.cpp */; };
+		7964F4501DD10BD100E27C9A /* LTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7964F44E1DD10BD100E27C9A /* LTimer.cpp */; };
+		7964F4531DD1141100E27C9A /* Dot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7964F4511DD1141100E27C9A /* Dot.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,11 +40,11 @@
 		7964F4421DCE912800E27C9A /* snippits */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = snippits; sourceTree = "<group>"; };
 		7964F4431DD0D5AA00E27C9A /* LTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LTexture.cpp; sourceTree = "<group>"; };
 		7964F4441DD0D5AA00E27C9A /* LTexture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LTexture.hpp; sourceTree = "<group>"; };
-		7964F4461DD0E5AC00E27C9A /* Character.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Character.cpp; sourceTree = "<group>"; };
-		7964F4471DD0E5AC00E27C9A /* Character.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Character.hpp; sourceTree = "<group>"; };
 		7964F4491DD0EF2D00E27C9A /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = ../../../../../Library/Frameworks/SDL2_ttf.framework; sourceTree = "<group>"; };
-		7964F44B1DD0F3BC00E27C9A /* LButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LButton.cpp; sourceTree = "<group>"; };
-		7964F44C1DD0F3BC00E27C9A /* LButton.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LButton.hpp; sourceTree = "<group>"; };
+		7964F44E1DD10BD100E27C9A /* LTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LTimer.cpp; sourceTree = "<group>"; };
+		7964F44F1DD10BD100E27C9A /* LTimer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LTimer.hpp; sourceTree = "<group>"; };
+		7964F4511DD1141100E27C9A /* Dot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Dot.cpp; sourceTree = "<group>"; };
+		7964F4521DD1141100E27C9A /* Dot.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Dot.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,12 +86,12 @@
 				7964F43F1DCE032100E27C9A /* enums.h */,
 				7927725C1DCD1A9C00600E15 /* GameSystem.cpp */,
 				7927725D1DCD1A9C00600E15 /* GameSystem.hpp */,
+				7964F4511DD1141100E27C9A /* Dot.cpp */,
+				7964F4521DD1141100E27C9A /* Dot.hpp */,
 				7964F4431DD0D5AA00E27C9A /* LTexture.cpp */,
 				7964F4441DD0D5AA00E27C9A /* LTexture.hpp */,
-				7964F4461DD0E5AC00E27C9A /* Character.cpp */,
-				7964F4471DD0E5AC00E27C9A /* Character.hpp */,
-				7964F44B1DD0F3BC00E27C9A /* LButton.cpp */,
-				7964F44C1DD0F3BC00E27C9A /* LButton.hpp */,
+				7964F44E1DD10BD100E27C9A /* LTimer.cpp */,
+				7964F44F1DD10BD100E27C9A /* LTimer.hpp */,
 			);
 			path = SDL_TEST_2;
 			sourceTree = "<group>";
@@ -163,11 +163,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7964F4531DD1141100E27C9A /* Dot.cpp in Sources */,
+				7964F4501DD10BD100E27C9A /* LTimer.cpp in Sources */,
 				7927725E1DCD1A9C00600E15 /* GameSystem.cpp in Sources */,
 				792772531DCD170000600E15 /* main.cpp in Sources */,
 				7964F4451DD0D5AA00E27C9A /* LTexture.cpp in Sources */,
-				7964F4481DD0E5AC00E27C9A /* Character.cpp in Sources */,
-				7964F44D1DD0F3BC00E27C9A /* LButton.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

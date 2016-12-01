@@ -100,3 +100,58 @@ gSpriteClips[ 3 ].h = 100;
 xpos[3] = SCREEN_WIDTH - gSpriteClips[ 3 ].w;
 ypos[3] = SCREEN_HEIGHT - gSpriteClips[ 3 ].h;
 }
+
+
+
+countedFrames++;
+
+//If frame finished early
+int frameTicks = capTimer.getTicks();
+if( frameTicks < TickPerFrame )
+{
+//Wait remaining time
+SDL_Delay( TickPerFrame - frameTicks );
+}
+
+
+//Calculate and correct fps
+if(1000.00 < fpsTimer.getTicks() - lastCheck){
+printf("%d Frames/Sec \n", countedFrames);
+countedFrames = 0;
+lastCheck = fpsTimer.getTicks();
+}
+
+
+//Set texture based on current keystate
+const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
+if( currentKeyStates[ SDL_SCANCODE_UP ] )
+{
+game.gCurrentTexture = (game.gTexture[UP_TEXTURE]);
+}
+else if( currentKeyStates[ SDL_SCANCODE_DOWN ] )
+{
+game.gCurrentTexture = (game.gTexture[DOWN_TEXTURE]);
+}
+else if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
+{
+game.gCurrentTexture = (game.gTexture[LEFT_TEXTURE]);
+}
+else if( currentKeyStates[ SDL_SCANCODE_RIGHT ] )
+{
+game.gCurrentTexture = (game.gTexture[RIGHT_TEXTURE]);
+}
+else
+{
+game.gCurrentTexture = (game.gTexture[PRESS_TEXTURE]);
+}
+
+//The frames per second timer
+LTimer fpsTimer;
+LTimer capTimer;
+//Start counting frames per second
+int countedFrames = 0;
+fpsTimer.start();
+capTimer.start();
+Uint32 lastCheck = fpsTimer.getTicks();
+const int FPS = 60;
+const int TickPerFrame = 1000/FPS;

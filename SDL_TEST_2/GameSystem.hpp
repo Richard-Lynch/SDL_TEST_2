@@ -15,8 +15,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
 #include <SDL2_ttf/SDL_ttf.h>
+#include <sstream>
 
-#include "LButton.hpp"
 #include "LTexture.hpp"
 #include "enums.h"
 
@@ -29,61 +29,33 @@ class GameSystem{
     //The window renderer
     SDL_Renderer* gRenderer = NULL;
     //Current displayed image
-    SDL_Surface* gCurrentSurface = NULL;
-    //Current displayed texture
-    SDL_Texture* gTexture[ KEY_PRESS_SURFACE_TOTAL ];
-    //The images that correspond to a keypress, array of images
-    SDL_Surface* gKeyPressSurfaces[ KEY_PRESS_SURFACE_TOTAL ];
-    //the strings that find the images, array of strings
-    std::string gKeyPressStrings[ KEY_PRESS_SURFACE_TOTAL ];
+    LTexture* gCurrentTexture = NULL;
     
-    //Buttons objects
-    LButton gButtons[ TOTAL_BUTTONS ];
-    LTexture gButtonSpriteSheetTexture;
-    
-    //Scene textures
-    LTexture gBackgroundTexture;
-    //Scene sprites
-    SDL_Rect gSpriteClips[ BUTTON_SPRITE_TOTAL ];
-    LTexture gSpriteSheetTexture;
-    //scene locations
-    int foo_x, foo_y;
-    int xpos[4];
-    int ypos[4];
-    
-    LTexture gFadeIn;
-    LTexture gFadeOut;
-    
-
+    //Title of window
+    const std::string title = "SDL Tutorials";
+    //The dimensions of the level
+    const int LEVEL_WIDTH = 1280;
+    const int LEVEL_HEIGHT = 960;
     //Screen dimension constants
     const int SCREEN_WIDTH = 640;
     const int SCREEN_HEIGHT = 480;
     
-    //Top left corner viewport
-    SDL_Rect topLeftViewport;
-    //Top right viewport
-    SDL_Rect topRightViewport;
-    //Bottom viewport
-    SDL_Rect bottomViewport;
-    
-    //text
-    const std::string splash = "x.bmp";
-    const std::string title = "SDL Tutorials";
+    //Current displayed texture
+    LTexture* gTexture[ TOTAL_TEXTURES ];
+    //the strings that find the images, array of strings
+    std::string gImage_Strings[ TOTAL_TEXTURES ];
+    SDL_Rect gClips[TOTAL_SPRITES];
+    int gSpriteLoc[TOTAL_SPRITES][TOTAL_POS];
     
     //flags
     bool initialised = false;
 
     //Starts up SDL and creates window
     bool init();
-
     //Loads media
     bool loadMedia();
-    SDL_Surface* loadSurface(std::string path);
     //Loads individual image as texture
     SDL_Texture* loadTexture( std::string path );
-    
-    //set Viewport
-    bool useViewports();
 
     //Frees media and shuts down SDL
     void close();
